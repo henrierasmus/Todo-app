@@ -1,8 +1,11 @@
-const projectArr = ['default'];
+const projectArr = [];
 
-const ProjectFactory = (projectName, todo) => {
+const ProjectFactory = (projectName) => {
+    let todos =[];
 
-    return { projectName, todo }
+    return { projectName, todos }
 };
+
+
 
 export { projectArr, ProjectFactory };
