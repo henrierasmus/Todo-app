@@ -1,8 +1,3 @@
-// create an object constructor for to-dos. 
-// Object should have properties: title, description, dueDate, priority, notes, checklist.
-// The app should have seperate lists for todos.
-// add functionality to view all projects, view all todos in a project, expand a single todo to see more details, complete a todo/project, delete a todo/project.
-// use date-fns for extra functionality with dates and times.
 const container = document.querySelector('#container');
 let submit;
 
@@ -33,24 +28,16 @@ const addTodoFunction = () => {
 	}
 	const newTodo = todoFactory(title, description, dueDate, priorityVal());
 	const projectPageName = document.querySelector('.project-name-div');
-	// if (project.projectName === projectPageName) {
-	// 	projectArr.map(newTodo);
-	// 	console.log('todo array of project', project.todos);
-	// // 		console.log('projectArr', projectArr);
-	// }
-	
-	
 	projectArr.forEach((project) => {
-		// need to compare projectName to name on DOM to push to only 1 object
-		const projectPageName = document.querySelector('.project-name-div');
-		if (project.projectName === projectPageName){
+		console.log('projectName', project.projectName);
+		console.log('projecPageName', projectPageName.textContent)
+		if(projectPageName === project.projectName.textContent) {
 			project.todos.push(newTodo);
-			console.log('todo array of project', project.todos);
-			console.log('projectArr', projectArr);
-			displayFunction._renderTodos();
-		} else {
-			console.log('error');
-		}			
+		}
+		// need to compare projectName to name on DOM to push to only 1 object
+		// console.log('todo array of project', project.todos);
+		// console.log('projectArr', projectArr);
+		displayFunction._renderTodos();			
 	});	
 }
 
@@ -69,12 +56,6 @@ const createProject = () => {
 	const projectName = document.querySelector('#project-name').value;
 	newProject = ProjectFactory(projectName);
 	projectArr.push(newProject);
-
-	projectArr.forEach((item, index) => {
-		item.id = index+1;
-	   });
-
-	displayFunction.displayProjectsPage();
 	
 	return newProject;
 }
@@ -82,9 +63,11 @@ const createProject = () => {
 const submitProject = () => {
 	const submitP = document.querySelector('#submitP');
 	submitP.addEventListener('click', () => {
-		displayFunction.displayProjectsPage();
 		createProject();
-		projectPage();
+		displayFunction.resetDom();
+		addProject();
+		displayFunction.addProjectButton();
+		// projectPage();
 	});	
 }
 
@@ -97,21 +80,55 @@ const addProject = () => {
 	});
 }
 
+
 const listenForAddProject = () => {
 	document.addEventListener('click', (e) => {
-		console.log(e.target);
+		console.log(e);
+		console.log('---project arr', projectArr);
 		if (e.target.matches('.project-div')) {
-			projectArr.forEach((project) => {
-				if (project.projectName === e.target.textContent) {
+			displayFunction.resetDom();
+			for (let i = 0; i < projectArr.length; i++) {
+				if(projectArr[i].projectName === e.target.textContent){
 					displayFunction.displayProject();
-				}			
-			});
+				}
+			}
+			// projectArr.forEach((project) => {
+			// 	if (project.projectName === e.target.textContent) {
+			// 		displayFunction.displayProject();
+			// 	}			
+			// });
 			handleAddTodoForm();
 			displayFunction.goToProjects();
 			listenForProjectBtn();
 		}
 	});
 }
+
+// const listenForAddProject = () => {
+// 	document.addEventListener('click', (e) => {
+// 		console.log(e);
+// 		console.log('project arr', projectArr);
+// 		if(e.target.matches('.project-div'))
+// 		projectArr.forEach((project) => {
+// 			if (e.target.textContent === project.name) {
+// 				console.log('project test', project);
+// 				console.log(projectArr)
+// 			}
+// 		});
+// 		 {
+// 			console.log(projectArr)
+// 			projectArr.forEach((project) => {
+				
+// 				if (project.projectName === e.target.textContent) {
+// 					displayFunction.displayProject();
+// 				}			
+// 			});
+// 			handleAddTodoForm();
+// 			displayFunction.goToProjects();
+// 			listenForProjectBtn();
+// 		}
+// 	});
+// }
 
 const handleAddTodoForm = () => {
 	const addTodoBtn = document.querySelector('#add-todo-form');
@@ -121,20 +138,26 @@ const handleAddTodoForm = () => {
 	});
 }
 
+// this function needs to take me to the page displaying different projects and add the listener
+// to the add project button
 const listenForProjectBtn = () => {
 	const projectPageBtn = document.querySelector('#project-page-button');
-	projectPageBtn.addEventListener('click', projectPage)
+	projectPageBtn.addEventListener('click', () => {
+		displayFunction.resetDom();
+		displayFunction.addProjectButton();
+		addProject();
+	});
 }
 
 
-const projectPage = () => {
-	displayFunction.resetDom();		
-	displayFunction.addProjectButton();
-	projectDiv = [...document.querySelectorAll('.project-div')];
-	addProject();	
-	listenForAddProject();
-	console.log(projectArr)
-}
+// const projectPage = () => {
+// 	displayFunction.resetDom();		
+// 	displayFunction.addProjectButton();
+// 	projectDiv = [...document.querySelectorAll('.project-div')];
+// 	addProject();	
+// 	listenForAddProject();
+// 	console.log(projectArr)
+// }
 
 // createProject ('test1', 'todo1');
 // createProject ('test2', 'todo2');
@@ -142,8 +165,10 @@ const projectPage = () => {
 
 
 // displayFunction._renderTodos();
-displayFunction.goToProjects();
-listenForProjectBtn();
+// displayFunction.goToProjects();
+// listenForProjectBtn();
+addProject();
+displayFunction.addProjectButton();
+listenForAddProject();
 
 export { todoFactory }; 
- 

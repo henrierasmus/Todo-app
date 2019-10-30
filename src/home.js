@@ -8,14 +8,19 @@ const displayFunction = (() => {
     const addButton = document.createElement('button');
     const projectPageBtn = document.createElement('button');
 
+    // there is a problem with this function, renders to many elements on the DOM
+    // the fucnnction fires for every project, need to look at validation in index.js
     function _renderTodos () {  
         todoCard.innerHTML = "";
         const render = (template, todoCard) => {
             todoCard.innerHTML += template;
         }
-        
+       
+        console.log('render the todos here');
         projectArr.forEach((project) => {
+            console.log('!!!!project in homejs', projectArr)
             project.todos.forEach((todo) => {
+                console.log('#####project.todo in home js', todo)
                 let template =           
                     `Title: ${todo.title}<br>
                     Description: ${todo.description}<br>
@@ -67,7 +72,6 @@ const displayFunction = (() => {
 
     const displayProjectsPage = () => {
         let projectDiv = document.createElement('div');
-        projectDiv.innerHTML = "";
 
         const render = (template, projectDiv) => {
             projectDiv.innerHTML += template;
@@ -83,16 +87,15 @@ const displayFunction = (() => {
 
     const displayProject = () => {
         const projectView = document.createElement('div');
-        resetDom();
+        console.log('displayproject function fired')
         projectArr.forEach((project) => {
-            projectView.innerHTML = `<div class="project-name-div">${project.projectName} ${project.todos}</div> <button id="add-todo-form">Add todo</button>`;
+            projectView.innerHTML = `<div class="project-name-div">${project.projectName}</div> <button id="add-todo-form">Add todo</button>`;
         });        
         container.appendChild(projectView);
     }
     
     const resetDom = () => {
         container.innerHTML = '';
-        console.log('dom reset')
     }
 
     return { 
