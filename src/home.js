@@ -72,7 +72,7 @@ const displayFunction = (() => {
         }
 
         projectArr.forEach(function(project) {
-            let template = `<div class="project-div">${project.projectName}</div>`;
+            let template = `<div class="project-div">${project.projectName}<br><button class="delete-project">Delete Project</button></div>`;
             render(template, projectDiv);
         });
         container.appendChild(projectDiv);

@@ -47,8 +47,6 @@ const addTodoFunction = (e) => {
 			projectArr[i].todos.push(newTodo);
 			displayFunction.resetDom()
 			displayFunction.displayProject(i);
-			
-
 			console.log(projectArr);
 		}
 	}
@@ -62,10 +60,25 @@ const handleAddTodoForm = () => {
 	});
 }
 
+const deleteProject = () => {
+	const deleteProjectBtns = [...document.querySelectorAll('.delete-project')];
+
+	deleteProjectBtns.forEach(deleteProjectBtn => {
+		deleteProjectBtn.addEventListener('click', (e) => {
+			for (let i = 0; i < projectArr.length; i++) {
+				if (projectArr[i].projectName === e.target.parentNode.firstChild.textContent) {
+					projectArr.splice(i, 1);
+					createHomePage()
+					console.log(projectArr)
+				}
+			}
+		});
+	});	
+}
+
 const submitButtons = () => {
 	document.addEventListener('click', (e) => {
 		if (e.target.matches('#submitBtn')) {
-			console.log('clicked!!')
 			addTodoFunction();	
 			createProjectPage();							
 		}
@@ -90,9 +103,7 @@ const listenForProject = () => {
 const displayPrject = () => {
 	for (let i = 0; i < projectArr.length; i++){
 		projectNameForm = document.querySelector('#project-name')			
-		console.log('test', projectArr[i].projectName)
 		if (projectArr[i].projectName === projectNameForm.value) {
-			console.log('this should work')
 			displayFunction.resetDom();
 			displayFunction.displayProject(i);
 			createProjectPage();
@@ -111,6 +122,8 @@ const createHomePage = () => {
 		createAddProjPage();
 	});
 	listenForProject();
+	// Delete Project Button
+	deleteProject();	
 }
 
 const createProjectPage = () => {
@@ -127,7 +140,6 @@ const createProjectPage = () => {
 	deleteTodo();
 	// Button to complete a todo(even listener) 
 	// Delete entire project
-
 	completeTodo();
 }
 
@@ -152,16 +164,14 @@ createHomePage()
 const deleteTodo = () => {
 	const deleteTodoBtns = [...document.querySelectorAll('.delete-todo')];
 	const projectPageName = document.querySelector('.project-name-div');
-	console.log('project Arr', projectArr)
+	console.log('project Arr Delete todo', projectArr)
 
 	deleteTodoBtns.forEach(deleteTodoBtn => {
 		deleteTodoBtn.addEventListener('click', (e) => {
-			// console.log(e)
-			// console.log('parent node first child', e.target.parentNode.firstChild.textContent)
 			for(let i = 0; i < projectArr.length; i++){
 				if (projectArr[i].projectName === projectPageName.textContent) {
 					for(let j = 0; j < projectArr[i].todos.length; j++){
-						if(projectArr[i].todos[j].title == e.target.parentNode.firstChild.textContent){
+						if(projectArr[i].todos[j].title === e.target.parentNode.firstChild.textContent){
 							projectArr[i].todos.splice(j, 1);
 							displayFunction.resetDom();
 							displayFunction.displayProject(i);
@@ -185,7 +195,6 @@ const completeTodo = () => {
 					for(let j = 0; j < projectArr[i].todos.length; j++){
 						if(projectArr[i].todos[j].title == e.target.parentNode.firstChild.textContent){
 							projectArr[i].todos[j].isComplete = !projectArr[i].todos[j].isComplete;
-							console.log('this todo is complete', projectArr[i].todos[j].isComplete)
 							displayFunction.resetDom();
 							displayFunction.displayProject(i);
 							createProjectPage();
@@ -196,5 +205,7 @@ const completeTodo = () => {
 		})
 	});	
 }
+
+
 
 export { todoFactory };
