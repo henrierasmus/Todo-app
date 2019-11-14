@@ -8,33 +8,27 @@ const displayFunction = (() => {
     const addButton = document.createElement('button');
     const projectPageBtn = document.createElement('button');
 
-    // there is a problem with this function, renders to many elements on the DOM
-    // the fucnnction fires for every project, need to look at validation in index.js
-    function _renderTodos () {  
+    function _renderTodos (j) {
+        console.log('_renderTodos fired')
         todoCard.innerHTML = "";
         const render = (template, todoCard) => {
             todoCard.innerHTML += template;
         }
-       
-        console.log('render the todos here');
-        projectArr.forEach((project) => {
-            console.log('!!!!project in homejs', projectArr)
-            project.todos.forEach((todo) => {
-                console.log('#####project.todo in home js', todo)
-                let template =           
-                    `Title: ${todo.title}<br>
-                    Description: ${todo.description}<br>
-                    Due Date: ${todo.dueDate}<br>
-                    Priority: ${todo.priorityVal}<br>`;
-                
-                render(template, todoCard);  
-            });               
-        });
-        container.appendChild(todoCard);            
+
+        for (let k = 0; k < projectArr.length; k++){
+            if (k === j) {
+                for (let i = 0; i < projectArr[k].todos.length; i++){
+                    let template = `<div class="todoCard" style=${projectArr[j].todos[i].isComplete == true ? "background-color:green" : "background-color:grey"}><p class="todo-title">${projectArr[j].todos[i].title}</p><p class="todo-desc">${projectArr[j].todos[i].description}</p><p class="due-date">Due Date: ${projectArr[j].todos[i].dueDate}</p><p class="prio">Priority: ${projectArr[j].todos[i].priorityVal}</p><button class="delete-todo">Delete</button></div>`
+                    render(template, todoCard);
+                }
+            }
+        }
+
+        container.appendChild(todoCard);
     }
-    
+
     function _renderAddTodo () {
-        todoForm.innerHTML = 
+        todoForm.innerHTML =
             `<form>
                 Title:<input type="text" name="title" id="title"><br>
                 Description:<input type="text" name="description" id="description"> <br>
@@ -51,11 +45,11 @@ const displayFunction = (() => {
 
     function _renderAddProject () {
         const projectForm = document.createElement('div');
-        projectForm.innerHTML = 
+        projectForm.innerHTML =
         `<form>
             Title:<input type="text" name="project-name" id="project-name"><br>
         </form>
-        <div id="submitP">Submit Project</div>`;
+        <button id="submitP">Submit Project</button>`;
         container.appendChild(projectForm);
     }
 
@@ -76,40 +70,64 @@ const displayFunction = (() => {
         const render = (template, projectDiv) => {
             projectDiv.innerHTML += template;
         }
-        
+
         projectArr.forEach(function(project) {
             let template = `<div class="project-div">${project.projectName}</div>`;
-            render(template, projectDiv);  
+            render(template, projectDiv);
         });
-        container.appendChild(projectDiv);  
+        container.appendChild(projectDiv);
 
     }
 
-    const displayProject = () => {
+    const displayProject = (item) => {
+        resetDom();
         const projectView = document.createElement('div');
-        console.log('displayproject function fired')
-        projectArr.forEach((project) => {
-            projectView.innerHTML = `<div class="project-name-div">${project.projectName}</div> <button id="add-todo-form">Add todo</button>`;
-        });        
+        const projectHeading = document.createElement('h1');
+
+        projectHeading.setAttribute('class', 'project-name-div');
+        projectHeading.textContent = `${projectArr[item].projectName}`;
         container.appendChild(projectView);
+        projectView.appendChild(projectHeading);
+        
+        for (let i = 0; i < projectArr.length; i++){
+            if (i === item ){
+                console.log('i', i)
+                console.log('item', item)
+                console.log('i', projectArr[i].projectName)
+                console.log('todos', projectArr[i].todos)
+                for (let j = 0; j < projectArr[item].todos.length; j++){
+                    console.log('j', j)
+                    _renderTodos(item);
+                }
+            }          
+            
+        }
     }
-    
+
+    const addTodoBtn = () => {
+       const addTodoBtn = document.createElement('div')
+       addTodoBtn.innerHTML = `<button id="add-todo-form">Add todo</button>`
+       container.appendChild(addTodoBtn)
+    }
+
     const resetDom = () => {
         container.innerHTML = '';
     }
 
-    return { 
-        _renderTodos, 
-        _renderAddTodo, 
-        todoCard, 
-        todoForm, 
-        displayProjectsPage, 
-        _renderAddProject, 
+
+    return {
+        _renderTodos,
+        _renderAddTodo,
+        todoCard,
+        todoForm,
+        displayProjectsPage,
+        _renderAddProject,
         addProjectButton,
         addButton,
         resetDom,
         displayProject,
         goToProjects,
+        addTodoBtn,
     };
 })();
 

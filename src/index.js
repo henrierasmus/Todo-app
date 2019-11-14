@@ -1,20 +1,35 @@
+// event listeners are looped when i click on a project
+
 const container = document.querySelector('#container');
-let submit;
+let newProject;
+let projectNameForm = document.querySelector('#project-name');
+let projectPageName = document.querySelector('.project-name-div');
+
 
 import { projectArr, ProjectFactory } from './projects';
 import displayFunction from './home';
 
 const todoFactory = (title, description, dueDate, priorityVal) => {
-	let complete = false;
+	let isComplete = false;
 	let notes = '';
 	let project = 'default';
-	return { title, description, dueDate, priorityVal, complete, notes, project }
+	return { title, description, dueDate, priorityVal, isComplete, notes, project }
 };
 
-const addTodoFunction = () => {
+const createProject = () => {
+	const projectNameForm = document.querySelector('#project-name').value;
+	newProject = ProjectFactory(projectNameForm);
+	projectArr.push(newProject);
+
+	return newProject;
+}
+
+const addTodoFunction = (e) => {
 	const title = document.querySelector('#title').value;
 	const description = document.querySelector('#description').value;
 	const dueDate = document.querySelector('#date').value;
+	projectPageName = document.querySelector('.project-name-div');
+
 	const priorityVal = () => {
 		let val;
 		const priorities = document.querySelectorAll('.priority');
@@ -27,108 +42,17 @@ const addTodoFunction = () => {
 		return val;
 	}
 	const newTodo = todoFactory(title, description, dueDate, priorityVal());
-	const projectPageName = document.querySelector('.project-name-div');
-	projectArr.forEach((project) => {
-		console.log('projectName', project.projectName);
-		console.log('projecPageName', projectPageName.textContent)
-		if(projectPageName === project.projectName.textContent) {
-			project.todos.push(newTodo);
+	for(let i = 0; i < projectArr.length; i++){
+		if (projectArr[i].projectName === projectPageName.textContent){
+			projectArr[i].todos.push(newTodo);
+			displayFunction.resetDom()
+			displayFunction.displayProject(i);
+			
+
+			console.log(projectArr);
 		}
-		// need to compare projectName to name on DOM to push to only 1 object
-		// console.log('todo array of project', project.todos);
-		// console.log('projectArr', projectArr);
-		displayFunction._renderTodos();			
-	});	
+	}
 }
-
-const submitButtons = () => {
-	document.addEventListener('click', (e) => {
-		if (e.target.matches('#submitBtn')) {
-			addTodoFunction();
-		}
-	});
-}
-
-let newProject;
-let projectDiv = [...document.querySelectorAll('.project-div')];
-
-const createProject = () => {
-	const projectName = document.querySelector('#project-name').value;
-	newProject = ProjectFactory(projectName);
-	projectArr.push(newProject);
-	
-	return newProject;
-}
-
-const submitProject = () => {
-	const submitP = document.querySelector('#submitP');
-	submitP.addEventListener('click', () => {
-		createProject();
-		displayFunction.resetDom();
-		addProject();
-		displayFunction.addProjectButton();
-		// projectPage();
-	});	
-}
-
-const addProject = () => {
-	displayFunction.displayProjectsPage();
-	displayFunction.addButton.addEventListener('click', () => {
-		displayFunction.resetDom();	
-		displayFunction._renderAddProject();
-		submitProject();
-	});
-}
-
-
-const listenForAddProject = () => {
-	document.addEventListener('click', (e) => {
-		console.log(e);
-		console.log('---project arr', projectArr);
-		if (e.target.matches('.project-div')) {
-			displayFunction.resetDom();
-			for (let i = 0; i < projectArr.length; i++) {
-				if(projectArr[i].projectName === e.target.textContent){
-					displayFunction.displayProject();
-				}
-			}
-			// projectArr.forEach((project) => {
-			// 	if (project.projectName === e.target.textContent) {
-			// 		displayFunction.displayProject();
-			// 	}			
-			// });
-			handleAddTodoForm();
-			displayFunction.goToProjects();
-			listenForProjectBtn();
-		}
-	});
-}
-
-// const listenForAddProject = () => {
-// 	document.addEventListener('click', (e) => {
-// 		console.log(e);
-// 		console.log('project arr', projectArr);
-// 		if(e.target.matches('.project-div'))
-// 		projectArr.forEach((project) => {
-// 			if (e.target.textContent === project.name) {
-// 				console.log('project test', project);
-// 				console.log(projectArr)
-// 			}
-// 		});
-// 		 {
-// 			console.log(projectArr)
-// 			projectArr.forEach((project) => {
-				
-// 				if (project.projectName === e.target.textContent) {
-// 					displayFunction.displayProject();
-// 				}			
-// 			});
-// 			handleAddTodoForm();
-// 			displayFunction.goToProjects();
-// 			listenForProjectBtn();
-// 		}
-// 	});
-// }
 
 const handleAddTodoForm = () => {
 	const addTodoBtn = document.querySelector('#add-todo-form');
@@ -138,37 +62,139 @@ const handleAddTodoForm = () => {
 	});
 }
 
-// this function needs to take me to the page displaying different projects and add the listener
-// to the add project button
-const listenForProjectBtn = () => {
-	const projectPageBtn = document.querySelector('#project-page-button');
-	projectPageBtn.addEventListener('click', () => {
-		displayFunction.resetDom();
-		displayFunction.addProjectButton();
-		addProject();
+const submitButtons = () => {
+	document.addEventListener('click', (e) => {
+		if (e.target.matches('#submitBtn')) {
+			console.log('clicked!!')
+			addTodoFunction();	
+			createProjectPage();							
+		}
 	});
 }
 
+const listenForProject = () => {
+	document.addEventListener('click', (e) => {
+		if (e.target.matches('.project-div')) {
+			displayFunction.resetDom();
+			for (let i = 0; i < projectArr.length; i++) {
+				if(projectArr[i].projectName === e.target.textContent){
+					displayFunction.resetDom();
+					displayFunction.displayProject(i);
+					createProjectPage();
+				}
+			}
+		}
+	});
+}
 
-// const projectPage = () => {
-// 	displayFunction.resetDom();		
-// 	displayFunction.addProjectButton();
-// 	projectDiv = [...document.querySelectorAll('.project-div')];
-// 	addProject();	
-// 	listenForAddProject();
-// 	console.log(projectArr)
-// }
+const displayPrject = () => {
+	for (let i = 0; i < projectArr.length; i++){
+		projectNameForm = document.querySelector('#project-name')			
+		console.log('test', projectArr[i].projectName)
+		if (projectArr[i].projectName === projectNameForm.value) {
+			console.log('this should work')
+			displayFunction.resetDom();
+			displayFunction.displayProject(i);
+			createProjectPage();
+		}
+	}
+}
 
-// createProject ('test1', 'todo1');
-// createProject ('test2', 'todo2');
-// createProject ('test3', 'todo3');
+const createHomePage = () => {
+	displayFunction.resetDom();
+	// Display all projects
+	displayFunction.displayProjectsPage();	
+	// Display add project button
+	displayFunction.addProjectButton();
+	// Projects must be clickable (even listener)
+	displayFunction.addButton.addEventListener('click', () => {		
+		createAddProjPage();
+	});
+	listenForProject();
+}
 
+const createProjectPage = () => {
+	// Display Project page		
+	// Button to add todo
+	displayFunction.addTodoBtn();
+	// Display add Todo form(make this a button later) -> push todo to project array
+	handleAddTodoForm();
+	// Button to go to the home page(event listener)
+	displayFunction.goToProjects();
+	const projectPageBtn = document.querySelector('#project-page-button');
+	projectPageBtn.addEventListener('click', createHomePage)
+	// Button to delete specific Todos(event litener)(splice?)
+	deleteTodo();
+	// Button to complete a todo(even listener) 
+	// Delete entire project
 
-// displayFunction._renderTodos();
-// displayFunction.goToProjects();
-// listenForProjectBtn();
-addProject();
-displayFunction.addProjectButton();
-listenForAddProject();
+	completeTodo();
+}
 
-export { todoFactory }; 
+const createAddProjPage = () => {
+	displayFunction.resetDom();
+	// display add project form
+	// Display add project button (event listener)
+	displayFunction._renderAddProject();
+	const submitP = document.querySelector('#submitP');
+	
+	submitP.addEventListener('click', () => {
+		// in event listener:
+		// create a project and push it into projectArr
+		createProject();
+		// Display the project
+		displayPrject();		
+	}); 
+}
+
+createHomePage()
+
+const deleteTodo = () => {
+	const deleteTodoBtns = [...document.querySelectorAll('.delete-todo')];
+	const projectPageName = document.querySelector('.project-name-div');
+	console.log('project Arr', projectArr)
+
+	deleteTodoBtns.forEach(deleteTodoBtn => {
+		deleteTodoBtn.addEventListener('click', (e) => {
+			// console.log(e)
+			// console.log('parent node first child', e.target.parentNode.firstChild.textContent)
+			for(let i = 0; i < projectArr.length; i++){
+				if (projectArr[i].projectName === projectPageName.textContent) {
+					for(let j = 0; j < projectArr[i].todos.length; j++){
+						if(projectArr[i].todos[j].title == e.target.parentNode.firstChild.textContent){
+							projectArr[i].todos.splice(j, 1);
+							displayFunction.resetDom();
+							displayFunction.displayProject(i);
+							createProjectPage();
+						}										
+					}				
+				}
+			}
+		})
+	});	
+}
+
+const completeTodo = () => {
+	const todoCards = [ ...document.querySelectorAll('.todoCard') ];
+	const projectPageName = document.querySelector('.project-name-div');
+
+	todoCards.forEach(todoCard => {
+		todoCard.addEventListener('click', (e) => {
+			for(let i = 0; i < projectArr.length; i++){
+				if (projectArr[i].projectName === projectPageName.textContent) {
+					for(let j = 0; j < projectArr[i].todos.length; j++){
+						if(projectArr[i].todos[j].title == e.target.parentNode.firstChild.textContent){
+							projectArr[i].todos[j].isComplete = !projectArr[i].todos[j].isComplete;
+							console.log('this todo is complete', projectArr[i].todos[j].isComplete)
+							displayFunction.resetDom();
+							displayFunction.displayProject(i);
+							createProjectPage();
+						}										
+					}				
+				}
+			}
+		})
+	});	
+}
+
+export { todoFactory };

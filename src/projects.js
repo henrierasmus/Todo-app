@@ -1,4 +1,13 @@
-const projectArr = [];
+let projectArr = [
+  {
+    projectName:"project1",
+    todos: []
+  },
+  {
+  projectName: "project2",
+  todos: []
+  }
+];
 
 const ProjectFactory = (projectName) => {
     let todos =[];
