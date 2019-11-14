@@ -67,6 +67,7 @@ const deleteProject = () => {
 		deleteProjectBtn.addEventListener('click', (e) => {
 			for (let i = 0; i < projectArr.length; i++) {
 				if (projectArr[i].projectName === e.target.parentNode.firstChild.textContent) {
+					console.log(e.target.parentNode.firstChild.textContent)
 					projectArr.splice(i, 1);
 					createHomePage()
 					console.log(projectArr)
@@ -87,7 +88,9 @@ const submitButtons = () => {
 
 const listenForProject = () => {
 	document.addEventListener('click', (e) => {
+		// console.log('target', e.target.parentNode.firstChild.textContent)
 		if (e.target.matches('.project-div')) {
+			console.log('test', e.target.parentNode.firstChild.textContent)
 			displayFunction.resetDom();
 			for (let i = 0; i < projectArr.length; i++) {
 				if(projectArr[i].projectName === e.target.textContent){

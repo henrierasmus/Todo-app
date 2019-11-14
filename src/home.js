@@ -9,7 +9,6 @@ const displayFunction = (() => {
     const projectPageBtn = document.createElement('button');
 
     function _renderTodos (j) {
-        console.log('_renderTodos fired')
         todoCard.innerHTML = "";
         const render = (template, todoCard) => {
             todoCard.innerHTML += template;
@@ -72,7 +71,7 @@ const displayFunction = (() => {
         }
 
         projectArr.forEach(function(project) {
-            let template = `<div class="project-div">${project.projectName}<br><button class="delete-project">Delete Project</button></div>`;
+            let template = `<div><p class="project-div">${project.projectName}</p><button class="delete-project">Delete Project</button></div>`;
             render(template, projectDiv);
         });
         container.appendChild(projectDiv);
@@ -91,12 +90,7 @@ const displayFunction = (() => {
         
         for (let i = 0; i < projectArr.length; i++){
             if (i === item ){
-                console.log('i', i)
-                console.log('item', item)
-                console.log('i', projectArr[i].projectName)
-                console.log('todos', projectArr[i].todos)
                 for (let j = 0; j < projectArr[item].todos.length; j++){
-                    console.log('j', j)
                     _renderTodos(item);
                 }
             }          
