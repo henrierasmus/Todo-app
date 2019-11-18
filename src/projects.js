@@ -4,9 +4,9 @@ let projectArr = [
     todos: []
   },
   {
-  projectName: "project2",
-  todos: []
-  }
+    projectName:"project2",
+    todos: []
+  },
 ];
 
 const ProjectFactory = (projectName) => {

@@ -1,12 +1,21 @@
 import { projectArr, ProjectFactory } from './projects';
 
-const container = document.querySelector('#container');
+const container = document.querySelector('.container');
 
 const displayFunction = (() => {
     const todoCard = document.createElement('div');
     const todoForm = document.createElement('form');
-    const addButton = document.createElement('button');
+    const addButtonDiv = document.createElement('div');
     const projectPageBtn = document.createElement('button');
+    const homePageHeading = document.createElement('div');
+    const projectContainer = document.createElement('div');
+    
+    projectContainer.setAttribute('class', 'row project-container');
+
+    function createHomePageHeading () {
+        homePageHeading.innerHTML = '<h1 id="home-heading">Projects</h1>';
+        container.appendChild(homePageHeading)
+    }
 
     function _renderTodos (j) {
         todoCard.innerHTML = "";
@@ -28,16 +37,31 @@ const displayFunction = (() => {
 
     function _renderAddTodo () {
         todoForm.innerHTML =
-            `<form>
-                Title:<input type="text" name="title" id="title"><br>
-                Description:<input type="text" name="description" id="description"> <br>
-                Due Date:<input type="date" name="date" id="date"><br>
-                Priority:<br><input type="radio" class="priority" name="priority" value="high" checked> High<br>
-                        <input type="radio" class="priority" name="priority" value="medium"> Medium<br>
-                        <input type="radio" class="priority" name="priority" value="Low"> Low
-            </form>
-            <div id="submitBtn">
-                Submit Todo
+            `<div id="todo-form">
+                <form>
+                    <div class="form-row allign-items-center">
+                        <div class="col-sm-2">
+                            <input type="text" name="title" placeholder="Title" id="title" class="form-control">
+                        </div>
+                        <div class="col">
+                            <input type="text" name="description" placeholder="Description" id="description" class="form-control"><br>
+                        </div>
+                    </div> 
+                    <div class="form-row allign-items-center">
+                        <div class="col-sm-3">
+                        Low        Due Date:<input type="date" name="date" id="date" class="form-control">
+                        </div>
+                    </div>               
+                    
+                    Priority:<br><input type="radio" class="priority" name="priority" value="high" checked> High<br>
+                            <input type="radio" class="priority" name="priority" value="medium"> Medium<br>
+                            <input type="radio" class="priority" name="priority" value="Low"> Low
+                </form>
+                <div>
+                    <button class="btn btn-dark" type="button" id="submitBtn">
+                        Submit Todo
+                    </button>
+                </div>
             </div>`;
             container.appendChild(todoForm);
     }
@@ -46,24 +70,29 @@ const displayFunction = (() => {
         const projectForm = document.createElement('div');
         projectForm.innerHTML =
         `<form>
-            Title:<input type="text" name="project-name" id="project-name"><br>
+            <input type="text" placeholder="Project Name" name="project-name" id="project-name" class="form-control"><br>
         </form>
-        <button id="submitP">Submit Project</button>`;
-        container.appendChild(projectForm);
+        <button id="submitP" class="btn btn-outline-dark btn-sm">Submit Project</button>`;
+        projectForm.setAttribute('class', 'col container-fluid')
+        projectContainer.appendChild(projectForm);
     }
 
     const addProjectButton = () => {
-        addButton.textContent = 'Add a Project';
-        container.appendChild(addButton);
+
+        addButtonDiv.innerHTML = '<button class="add-proj-btn btn btn-outline-dark">Add a Project</button>';
+        projectContainer.appendChild(addButtonDiv);
+        addButtonDiv.setAttribute('class', 'col');
     }
 
     const goToProjects = () => {
         projectPageBtn.textContent = 'Go to projects';
         container.appendChild(projectPageBtn);
         projectPageBtn.setAttribute('id', 'project-page-button');
+        projectPageBtn.setAttribute('class', 'btn btn-dark');
     }
 
     const displayProjectsPage = () => {
+        
         let projectDiv = document.createElement('div');
 
         const render = (template, projectDiv) => {
@@ -71,11 +100,12 @@ const displayFunction = (() => {
         }
 
         projectArr.forEach(function(project) {
-            let template = `<div><p class="project-div">${project.projectName}</p><button class="delete-project">Delete Project</button></div>`;
+            let template = `<div><h2 class="project-div">${project.projectName}</h2><button class="delete-project btn btn-outline-danger btn-sm">Delete Project</button></div>`;
             render(template, projectDiv);
         });
-        container.appendChild(projectDiv);
-
+        container.appendChild(projectContainer);
+        projectContainer.appendChild(projectDiv);
+        projectDiv.setAttribute('class', 'col projects-container');
     }
 
     const displayProject = (item) => {
@@ -100,12 +130,13 @@ const displayFunction = (() => {
 
     const addTodoBtn = () => {
        const addTodoBtn = document.createElement('div')
-       addTodoBtn.innerHTML = `<button id="add-todo-form">Add todo</button>`
+       addTodoBtn.innerHTML = `<button id="add-todo-form" class="btn btn-dark" data-toggle="button" aria-pressed="false" autocomplete="off">Add todo</button>`
        container.appendChild(addTodoBtn)
     }
 
     const resetDom = () => {
         container.innerHTML = '';
+        projectContainer.innerHTML='';
     }
 
 
@@ -117,15 +148,14 @@ const displayFunction = (() => {
         displayProjectsPage,
         _renderAddProject,
         addProjectButton,
-        addButton,
+        addButtonDiv,
         resetDom,
         displayProject,
         goToProjects,
         addTodoBtn,
+        createHomePageHeading,
+
     };
 })();
-
-
-
 
 export default displayFunction;

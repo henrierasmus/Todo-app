@@ -1,6 +1,5 @@
 // event listeners are looped when i click on a project
 
-const container = document.querySelector('#container');
 let newProject;
 let projectNameForm = document.querySelector('#project-name');
 let projectPageName = document.querySelector('.project-name-div');
@@ -117,12 +116,15 @@ const displayPrject = () => {
 const createHomePage = () => {
 	displayFunction.resetDom();
 	// Display all projects
+	displayFunction.createHomePageHeading();
 	displayFunction.displayProjectsPage();	
 	// Display add project button
 	displayFunction.addProjectButton();
 	// Projects must be clickable (even listener)
-	displayFunction.addButton.addEventListener('click', () => {		
-		createAddProjPage();
+	displayFunction.addButtonDiv.addEventListener('click', (e) => {
+		if(e.target.matches('.add-proj-btn')){
+			createAddProjPage();
+		}	
 	});
 	listenForProject();
 	// Delete Project Button
@@ -148,6 +150,8 @@ const createProjectPage = () => {
 
 const createAddProjPage = () => {
 	displayFunction.resetDom();
+	displayFunction.createHomePageHeading();
+	displayFunction.displayProjectsPage();	
 	// display add project form
 	// Display add project button (event listener)
 	displayFunction._renderAddProject();
