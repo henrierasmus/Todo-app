@@ -18,9 +18,24 @@
 
 .projects-container {
     box-shadow: -23px 12px 21px 20px rgba(41, 94, 163, 1);
+    border-radius: 15px;
+    padding: 20px;
 }
 
 #todo-form {
     box-shadow: -23px 12px 21px 20px rgba(41, 94, 163, 1);
     padding: 20px;
+    border-radius: 25px;
+}
+
+.todo-complete {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.todoCard {
+    margin-bottom: 25px;
+    box-shadow: -15px 12px 21px 0px rgba(41, 94, 163, 1);
+    padding: 20px;
+    border-radius: 25px;
 }

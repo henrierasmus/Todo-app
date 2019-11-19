@@ -1,10 +1,6 @@
 let projectArr = [
   {
-    projectName:"project1",
-    todos: []
-  },
-  {
-    projectName:"project2",
+    projectName:"Default",
     todos: []
   },
 ];

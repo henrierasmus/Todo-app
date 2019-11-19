@@ -26,7 +26,8 @@ const displayFunction = (() => {
         for (let k = 0; k < projectArr.length; k++){
             if (k === j) {
                 for (let i = 0; i < projectArr[k].todos.length; i++){
-                    let template = `<div class="todoCard" style=${projectArr[j].todos[i].isComplete == true ? "background-color:green" : "background-color:grey"}><p class="todo-title">${projectArr[j].todos[i].title}</p><p class="todo-desc">${projectArr[j].todos[i].description}</p><p class="due-date">Due Date: ${projectArr[j].todos[i].dueDate}</p><p class="prio">Priority: ${projectArr[j].todos[i].priorityVal}</p><button class="delete-todo">Delete</button></div>`
+                    let template = `<div class="todoCard${projectArr[j].todos[i].isComplete === true ? ' todo-complete': ''}"><p class="todo-title">${projectArr[j].todos[i].title}</p><p class="todo-desc">${projectArr[j].todos[i].description}</p><p class="due-date">Due Date: ${projectArr[j].todos[i].dueDate}</p><p class="prio">Priority: ${projectArr[j].todos[i].priorityVal}</p><button class="delete-todo btn btn-outline-danger">Delete</button></div>`
+                    // todoCard.setAttribute('class', 'todoCard')
                     render(template, todoCard);
                 }
             }
